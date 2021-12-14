@@ -1,3 +1,7 @@
+html {
+    font-family: 'Abel';
+}
+
 #preview_product {
     max-height: 500px;
     max-width: 500px;
@@ -46,3 +50,10 @@
 {
     width: 100%;
 }
+
+#winner {
+    display: flex;
+    flex-direction: column;
+
+}
+ 

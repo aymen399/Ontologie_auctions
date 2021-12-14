@@ -23,3 +23,7 @@ class TopUpForm(forms.Form):
 class CommentForm(forms.Form):
     comment = forms.CharField(widget=forms.Textarea)
 
+class BidForm(forms.Form):  #useless for now
+    bidAmount = forms.CharField(max_length=20)
+    auction_id = forms.CharField(max_length=45)
+    bidQuantity = forms.CharField(max_length=20)

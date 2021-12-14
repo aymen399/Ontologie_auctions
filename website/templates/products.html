@@ -34,7 +34,7 @@
                     </div>
                     <p class="card-text">{{ auction.product_id.description }}</p>
                     {% if todays_date > auction.time_starting|date:'Y-m-d-H-i-s' %}
-                    <h4 class="card-title text-center">€{{auction|current_price}}</h4>
+                  
                     {% endif %}
                     <p class="card-text"><small class="text-muted"> 
                     {% if todays_date > auction.time_starting|date:'Y-m-d-H-i-s' %}

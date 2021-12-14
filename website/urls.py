@@ -1,7 +1,9 @@
-from . import views
+from . import views, converts
 from django.urls import path
 
 app_name = 'website'
+
+
 
 urlpatterns = [
 	path('', views.index, name='index'),
@@ -16,5 +18,5 @@ urlpatterns = [
     path('watchlist/', views.watchlist_page, name='watchlist'),
     path('bid/<int:auction_id>/', views.bid_page, name='bid_page'),
     path('bid/<int:auction_id>/comment/', views.comment, name='comment'),
-    path('bid/<int:auction_id>/raise_bid/', views.raise_bid, name='raise_bid'),
+    path('bid/raise_bid/', views.raise_bid, name='raise_bid'),
 ]
