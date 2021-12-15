@@ -13,6 +13,11 @@
 
         <div id="bidding" class="jumbotron">
 			<div id="bid_table">
+                {% if winner and not shareable%}
+                <img src="/static/images/winner.png" alt="Your the current winner" width="50" height="50">
+                <h4>You are the current winner !!</h4>
+                {% endif %}
+
             <table  class="table table-borderless">
                 <tbody>
                     <tr>
@@ -20,23 +25,48 @@
                         <td><small>Time left:</small></td>
                         <td>{{ stats.0 }}</td>
                         {% else %}
-                        <p>Auction Ended! The winner is : {{ stats.3 }}</p>
+                        <h4>Auction Ended!!</h4>
+                        
                         {% endif %}
                     </tr>
+                    {% if not shareable %}
                     <tr>
-                        <td><small>Current bit:</small></td>
+                        <td><small>Current bid:</small></td>
                         <td><b>EU {{stats.1}}€</b></td>
                         <td><small>[ {{ auction.number_of_bids }} bids ]</small></td>
+                        
                     </tr>
+                    {% else %}
+                    <tr>
+                        <td><small>Default base price:</small></td>
+                        <td><b>EU {{stats.1}}€</b></td>
+                        <td><small>[ {{ auction.number_of_bids }} bids ]</small></td>
+                        
+                    </tr>
+                    <tr>
+                          <td>Available Quantity :</td> 
+                          <td><b>{{qte}}</b></td> 
+                    </tr>
+                    {% endif %}
                 </tbody>
             </table>
 			</div>
 			{% if stats.2 %}
-            <div>
-                    <label for="bidAmount">amount:</label>
-                <input type="text" id="bidAmount" name="bidAmount" class=" form-control" style="margin-bottom: 5px;">
-                <button type="button" id="b_button" class="btn btn-primary" onclick="location.href='/website/bid/{{auction.id}}/raise_bid'">Bid</button>
-            </div>
+            <form method="post" action="/website/bid/raise_bid/"> {% csrf_token %}
+                {% if shareable %}
+                <label for="bidAmount">base price proposed:</label>
+                {% else %}
+                <label for="bidAmount">amount:</label>
+                {% endif %}
+               <input type="text" id="bidAmount" name="bidAmount" class=" form-control" style="margin-bottom: 5px;">
+                {% if shareable %}
+                    <label for="bidQuantity">Quantity :</label>
+                <input type="number" id="bidQuantity" name="bidQuantity" class=" form-control" style="margin-bottom: 5px;">
+                {% endif %}
+                <input type="hidden" name="auction_id" value="{{auction.id}}">
+                <button type="submit" id="b_button" class="btn btn-primary">Bid</button>
+                <!--<button id="subbut" type="submit" class="btn btn-primary col-sm-5" value="register_v2">Submit</button> //   onclick="location.href='/website/bid/{{auction.id}}/raise_bid'"-->
+            </form> 
             {% endif %}
             <div>
                 <button type="button" id="w_button" class="btn btn-outline-primary watch_button" onclick="location.href='/website/watchlist/{{auction.id}}'">
@@ -54,12 +84,11 @@
             </div>
         </div>
 
-        <div id="comments">
+      <!-- <div id="comments">
             {% for c in stats.4 %}
             {{ c.user_id.username }} : {{ c.message }}<br>
             {% endfor %}
-        </div>
-
+        
         <form method="post" action="/website/bid/{{auction.id}}/comment/">{% csrf_token %}
         <div class="form-group">
             <label for="comment">Comment:</label>
@@ -68,6 +97,31 @@
 
         <button id="post_button" type="submit" class="btn btn-outline-primary">Post Comment</button>
         </form>
+        </div> -->
+        {% if shareable %}
+        <table class="table table-striped" id="ranking">
+            <thead>
+                <tr>
+                    <th colspan="2" style="text-align:center">Last best offers</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Proposed Quantity</td>
+                    <td>Proposed Price</td>
+                </tr>
+        {% for offer in best_offers %}
+        <tr>
+            <td>{{offer.qte}}</td>
+            <td>{{offer.base_price}}</td>
+        </tr>
+      
+            
+        {% endfor %}
+    </tbody>
+</table>
+        {% endif %}
+
     </div>
 </div>
 {% endblock %}
